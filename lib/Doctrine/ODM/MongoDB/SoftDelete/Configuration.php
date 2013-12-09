@@ -21,7 +21,7 @@ namespace Doctrine\ODM\MongoDB\SoftDelete;
 
 /**
  * Configuration class for the SoftDelete functionality.
- * 
+ *
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.com
  * @since       1.0
@@ -35,7 +35,7 @@ class Configuration
      * @var array
      */
     private $attributes = array(
-        'deletedFieldName' => 'deletedAt'
+        'deletedFieldName' => 'deleted'
     );
 
     /**

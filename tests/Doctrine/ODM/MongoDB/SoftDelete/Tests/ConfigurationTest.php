@@ -10,7 +10,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     public function testDefaultDeletedFieldName()
     {
         $configuration = new Configuration();
-        $this->assertEquals('deletedAt', $configuration->getDeletedFieldName());
+        $this->assertEquals('deleted', $configuration->getDeletedFieldName());
     }
 
     public function testSetDeletedFieldName()

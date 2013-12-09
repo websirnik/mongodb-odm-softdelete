@@ -24,7 +24,7 @@ SoftDeleteable interface:
 
     interface SoftDeleteable
     {
-        function getDeletedAt();
+        function getDeleted();
     }
 
 An implementation might look like this:
@@ -37,11 +37,11 @@ An implementation might look like this:
         // ...
 
         /** @mongodb:Date */
-        private $deletedAt;
+        private $deleted;
 
-        public function getDeletedAt()
+        public function getDeleted()
         {
-            return $this->deletedAt;
+            return $this->deleted;
         }
 
         // ...
@@ -59,16 +59,16 @@ Once you have the $sdm you can start managing the soft delete state of your docu
 
 The above would issue a simple query setting the deleted date:
 
-    db.users.update({ _id : { $in : userIds }}, { $set : { deletedAt : new Date() } })
+    db.users.update({ _id : { $in : userIds }}, { $set : { deleted : new Date() } })
 
 Now if we were to restore the documents:
 
     $sdm->restore($jwage);
     $sdm->flush();
 
-It would unset the deletedAt date:
+It would unset the deleted date:
 
-    db.users.update({ _id : { $in : userIds }}, { $unset : { deletedAt : true } })
+    db.users.update({ _id : { $in : userIds }}, { $unset : { deleted : true } })
 
 ## Events
 

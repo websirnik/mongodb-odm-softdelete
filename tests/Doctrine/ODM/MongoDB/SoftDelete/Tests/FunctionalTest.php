@@ -38,11 +38,11 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         $this->sdm->delete($seller);
         $this->sdm->flush();
 
-        $this->assertInstanceOf('DateTime', $seller->getDeletedAt());
+        $this->assertInstanceOf('DateTime', $seller->getDeleted());
 
         $check = $this->dm->getDocumentCollection(get_class($seller))->findOne();
-        $this->assertTrue(isset($check['deletedAt']));
-        $this->assertInstanceOf('MongoDate', $check['deletedAt']);
+        $this->assertTrue(isset($check['deleted']));
+        $this->assertInstanceOf('MongoDate', $check['deleted']);
     }
 
     public function testDeleteMultiple()
@@ -57,26 +57,26 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         $this->sdm->delete($seller2);
         $this->sdm->flush();
 
-        $this->assertInstanceOf('DateTime', $seller1->getDeletedAt());
-        $this->assertInstanceOf('DateTime', $seller2->getDeletedAt());
+        $this->assertInstanceOf('DateTime', $seller1->getDeleted());
+        $this->assertInstanceOf('DateTime', $seller2->getDeleted());
 
         $check1 = $this->dm->getDocumentCollection(get_class($seller1))->findOne();
-        $this->assertTrue(isset($check1['deletedAt']));
-        $this->assertInstanceOf('MongoDate', $check1['deletedAt']);
+        $this->assertTrue(isset($check1['deleted']));
+        $this->assertInstanceOf('MongoDate', $check1['deleted']);
 
         $check2 = $this->dm->getDocumentCollection(get_class($seller2))->findOne();
-        $this->assertTrue(isset($check2['deletedAt']));
-        $this->assertInstanceOf('MongoDate', $check2['deletedAt']);
+        $this->assertTrue(isset($check2['deleted']));
+        $this->assertInstanceOf('MongoDate', $check2['deleted']);
 
         $this->sdm->restore($seller1);
         $this->sdm->restore($seller2);
         $this->sdm->flush();
 
         $check1 = $this->dm->getDocumentCollection(get_class($seller1))->findOne();
-        $this->assertFalse(isset($check1['deletedAt']));
+        $this->assertFalse(isset($check1['deleted']));
 
         $check2 = $this->dm->getDocumentCollection(get_class($seller2))->findOne();
-        $this->assertFalse(isset($check2['deletedAt']));
+        $this->assertFalse(isset($check2['deleted']));
     }
 
     public function testRestore()
@@ -89,16 +89,16 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         $this->sdm->flush();
 
         $check = $this->dm->getDocumentCollection(get_class($seller))->findOne();
-        $this->assertTrue(isset($check['deletedAt']));
-        $this->assertInstanceOf('MongoDate', $check['deletedAt']);
+        $this->assertTrue(isset($check['deleted']));
+        $this->assertInstanceOf('MongoDate', $check['deleted']);
 
         $this->sdm->restore($seller);
         $this->sdm->flush();
 
-        $this->assertNull($seller->getDeletedAt());
+        $this->assertNull($seller->getDeleted());
 
         $check = $this->dm->getDocumentCollection(get_class($seller))->findOne();
-        $this->assertFalse(isset($check['deletedAt']));
+        $this->assertFalse(isset($check['deleted']));
     }
 
     public function testEvents()
@@ -145,25 +145,25 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         $this->sdm->flush();
 
         $count = $this->dm->createQueryBuilder(get_class($seller))
-            ->field('deletedAt')->exists(false)
+            ->field('deleted')->exists(false)
             ->getQuery()
             ->count();
         $this->assertEquals(0, $count);
 
         $count = $this->dm->createQueryBuilder(get_class($seller))
-            ->field('deletedAt')->exists(true)
+            ->field('deleted')->exists(true)
             ->getQuery()
             ->count();
         $this->assertEquals(1, $count);
 
         $count = $this->dm->createQueryBuilder(get_class($sellable1))
-            ->field('deletedAt')->exists(false)
+            ->field('deleted')->exists(false)
             ->getQuery()
             ->count();
         $this->assertEquals(0, $count);
 
         $count = $this->dm->createQueryBuilder(get_class($sellable1))
-            ->field('deletedAt')->exists(true)
+            ->field('deleted')->exists(true)
             ->getQuery()
             ->count();
         $this->assertEquals(3, $count);
@@ -172,13 +172,13 @@ class FunctionalTest extends PHPUnit_Framework_TestCase
         $this->sdm->flush();
 
         $count = $this->dm->createQueryBuilder(get_class($seller))
-            ->field('deletedAt')->exists(false)
+            ->field('deleted')->exists(false)
             ->getQuery()
             ->count();
         $this->assertEquals(1, $count);
 
         $count = $this->dm->createQueryBuilder(get_class($sellable1))
-            ->field('deletedAt')->exists(false)
+            ->field('deleted')->exists(false)
             ->getQuery()
             ->count();
         $this->assertEquals(2, $count);
@@ -307,7 +307,7 @@ class Seller implements SoftDeleteable
     private $id;
 
     /** @ODM\Date @ODM\Index */
-    private $deletedAt;
+    private $deleted;
 
     /** @ODM\String */
     private $name;
@@ -327,9 +327,9 @@ class Seller implements SoftDeleteable
         return $this->name;
     }
 
-    public function getDeletedAt()
+    public function getDeleted()
     {
-        return $this->deletedAt;
+        return $this->deleted;
     }
 }
 
@@ -340,7 +340,7 @@ class Sellable implements SoftDeleteable
     private $id;
 
     /** @ODM\Date @ODM\Index */
-    private $deletedAt;
+    private $deleted;
 
     /** @ODM\ReferenceOne(targetDocument="Seller") */
     private $seller;
@@ -360,8 +360,8 @@ class Sellable implements SoftDeleteable
         return $this->seller;
     }
 
-    public function getDeletedAt()
+    public function getDeleted()
     {
-        return $this->deletedAt;
+        return $this->deleted;
     }
 }

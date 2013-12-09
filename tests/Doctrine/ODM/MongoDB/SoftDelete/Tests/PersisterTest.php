@@ -70,7 +70,7 @@ class PersisterTest extends PHPUnit_Framework_TestCase
             ->with(
                 $query,
                 array('$set' => array(
-                    'deletedAt' => $date
+                    'deleted' => $date
                 )),
                 array(
                     'multiple' => true
@@ -80,7 +80,7 @@ class PersisterTest extends PHPUnit_Framework_TestCase
         $configuration = $this->getMockConfiguration();
         $configuration->expects($this->once())
             ->method('getDeletedFieldName')
-            ->will($this->returnValue('deletedAt'));
+            ->will($this->returnValue('deleted'));
 
         $documentPersister = $this->getMockDocumentPersister();
         $documentPersister->expects($this->once())
@@ -108,7 +108,7 @@ class PersisterTest extends PHPUnit_Framework_TestCase
             ->with(
                 $query,
                 array('$unset' => array(
-                    'deletedAt' => true
+                    'deleted' => true
                 )),
                 array(
                     'multiple' => true
@@ -118,7 +118,7 @@ class PersisterTest extends PHPUnit_Framework_TestCase
         $configuration = $this->getMockConfiguration();
         $configuration->expects($this->once())
             ->method('getDeletedFieldName')
-            ->will($this->returnValue('deletedAt'));
+            ->will($this->returnValue('deleted'));
 
         $documentPersister = $this->getMockDocumentPersister();
         $documentPersister->expects($this->once())

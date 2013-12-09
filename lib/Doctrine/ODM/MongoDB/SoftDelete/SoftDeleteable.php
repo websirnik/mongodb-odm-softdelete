@@ -24,7 +24,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 /**
  * Interface for Doctrine MongoDB ODM documents to implement if they want to use
  * the SoftDelete functionality.
- * 
+ *
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.com
  * @since       1.0
@@ -35,7 +35,7 @@ interface SoftDeleteable
     /**
      * Gets the date that this object was deleted at.
      *
-     * @return DateTime $deletedAt
+     * @return DateTime $deleted
      */
-    function getDeletedAt();
+    function getDeleted();
 }
